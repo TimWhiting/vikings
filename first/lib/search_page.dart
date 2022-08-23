@@ -21,10 +21,10 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PubAppbar(),
+      appBar: const PubAppbar(),
       body: Column(
         children: [
-          SearchBar(),
+          const SearchBar(),
           Expanded(
             child: ListView(
               children: [
