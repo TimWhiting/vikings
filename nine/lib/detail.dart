@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'pub_ui/appbar.dart';
+import 'pub_ui/package_detail_body.dart';
+import 'pub_ui/pub_repository.dart';
+import 'search_page.dart';
+
+part 'detail.g.dart';
+
+@riverpod
+Future<Package> fetchPackageDetails(
+  FetchPackageDetailsRef ref, {
+  required String packageName,
+}) async {
+  return ref
+      .watch(PubRepositoryProvider)
+      .getPackageDetails(packageName: packageName);
+}
+
+@riverpod
+class GetPackageMetrics extends _$GetPackageMetrics {
+  @override
+  Future<PackageMetricsScore> build({
+    required String packageName,
+  }) async {
+    return ref
+        .watch(PubRepositoryProvider)
+        .getPackageMetrics(packageName: packageName);
+  }
+
+  Future<void> like() async {
+    await ref.watch(PubRepositoryProvider).like(packageName: packageName);
+
+    ref.invalidateSelf();
+    ref.invalidate(GetLikedPackagesProvider);
+  }
+
+  Future<void> unlike() async {
+    await ref.watch(PubRepositoryProvider).unlike(packageName: packageName);
+
+    ref.invalidateSelf();
+    ref.invalidate(GetLikedPackagesProvider);
+  }
+}
+
+@riverpod
+Future<List<String>> getLikedPackages(GetLikedPackagesRef ref) async {
+  return ref.watch(PubRepositoryProvider).getLikedPackages();
+}
+
+/// The detail page of a package, typically reached by clicking on a package from [SearchPage].
+class PackageDetailPage extends ConsumerWidget {
+  const PackageDetailPage({Key? key, required this.packageName})
+      : super(key: key);
+
+  /// The name of the package that is inspected.
+  final String packageName;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final packageDetails = ref.watch(
+      FetchPackageDetailsProvider(packageName: packageName),
+    );
+    final metrics = ref.watch(
+      GetPackageMetricsProvider(packageName: packageName),
+    );
+
+    final isLiked = ref
+            .watch(GetLikedPackagesProvider)
+            .valueOrNull
+            ?.contains(packageName) ??
+        false;
+
+    return Scaffold(
+      appBar: const PubAppbar(),
+      body: packageDetails.when(
+        error: (err, stack) => Text('Err $err'),
+        loading: () => CircularProgressIndicator(),
+        data: (package) {
+          return metrics.when(
+            error: (err, stack) => Text('Err $err'),
+            loading: () => CircularProgressIndicator(),
+            data: (metrics) {
+              return PackageDetailBodyScrollView(
+                packageName: packageName,
+                packageVersion: package.latest.version,
+                packageDescription: package.latest.pubspec.description,
+                grantedPoints: metrics.grantedPoints,
+                likeCount: metrics.likeCount,
+                maxPoints: metrics.maxPoints,
+                popularityScore: metrics.popularityScore * 100,
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final notifier = ref.read(
+            GetPackageMetricsProvider(packageName: packageName).notifier,
+          );
+
+          print('a');
+
+          if (!isLiked) {
+            notifier.like();
+          } else {
+            notifier.unlike();
+          }
+        },
+        child: isLiked
+            ? const Icon(Icons.favorite)
+            : const Icon(Icons.favorite_border),
+      ),
+    );
+  }
+}
