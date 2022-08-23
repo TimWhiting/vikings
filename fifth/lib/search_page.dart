@@ -10,8 +10,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'search_page.g.dart';
 
 @riverpod
+PubRepository pubRepository(PubRepositoryRef ref) {
+  return PubRepository();
+}
+
+@riverpod
 Future<List<Package>> fetchPackages(FetchPackagesRef ref) async {
-  final repository = PubRepository();
+  final repository = ref.watch(PubRepositoryProvider);
 
   return repository.getPackages(page: 0);
 }

@@ -29,7 +29,17 @@ class _SystemHash {
   }
 }
 
-String $fetchPackagesHash() => r'955ced425cbe92f29ae41daf52242d9a99db8158';
+String $pubRepositoryHash() => r'84cf58249e32ee9514705d307a691b0e33ab502a';
+
+/// See also [pubRepository].
+final PubRepositoryProvider = AutoDisposeProvider<PubRepository>(
+  pubRepository,
+  name: r'PubRepositoryProvider',
+  debugGetCreateSourceHash:
+      bool.fromEnvironment('dart.vm.product') ? null : $pubRepositoryHash,
+);
+typedef PubRepositoryRef = AutoDisposeProviderRef<PubRepository>;
+String $fetchPackagesHash() => r'33f38dc4100e6d5a045981df62f432ffb46a8d35';
 
 /// See also [fetchPackages].
 final FetchPackagesProvider = AutoDisposeFutureProvider<List<Package>>(
