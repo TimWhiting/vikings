@@ -14,7 +14,7 @@ class Package {
 }
 
 @riverpod
-List<Package> fetchPackages(FetchPackagesRef ref) {
+Future<List<Package>> fetchPackages(FetchPackagesRef ref) async {
   return [
     Package('riverpod'),
     Package('freezed'),
@@ -34,20 +34,26 @@ class SearchPage extends ConsumerWidget {
         children: [
           const SearchBar(),
           Expanded(
-            child: ListView(
-              children: [
-                for (final package in ref.watch(FetchPackagesProvider))
-                  PackageItem(
-                    name: package.name,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return PackageDetailPage(packageName: package.name);
-                      }),
-                    ),
-                  ),
-              ],
-            ),
+            child: ref.watch(FetchPackagesProvider).when(
+                loading: () => CircularProgressIndicator(),
+                error: (err, stack) => Text('Error $err'),
+                data: (packages) {
+                  return ListView(
+                    children: [
+                      for (final package in packages)
+                        PackageItem(
+                          name: package.name,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return PackageDetailPage(
+                                  packageName: package.name);
+                            }),
+                          ),
+                        ),
+                    ],
+                  );
+                }),
           ),
         ],
       ),
