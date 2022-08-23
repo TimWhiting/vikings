@@ -51,10 +51,10 @@ Pub app:
 - start with a synchronous using Provider<int>
 - refactor to @riverpod and showcase hot-reload
 - refactor to fetching the first page of the packages API -> show "when" 
+- infinite list -> ListView.builder + family with page parameter
 - add detail page
 - cancel network request of detail page if leaving quickly
 - reusable cancellation logic
-- infinite list -> ListView.builder + family with page parameter
 - What about error handling? Nothing to do
 - Add detail package -> family with packageName parameter
 - using cacheTime such that leaving then re-entering a detrail page quickly doesn't refetch it immediately
