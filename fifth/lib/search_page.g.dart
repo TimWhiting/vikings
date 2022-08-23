@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $fetchPackagesHash() => r'7945c1a47295f8fce9b662a5585a1d5decacffd5';
+String $fetchPackagesHash() => r'955ced425cbe92f29ae41daf52242d9a99db8158';
 
 /// See also [fetchPackages].
 final FetchPackagesProvider = AutoDisposeFutureProvider<List<Package>>(

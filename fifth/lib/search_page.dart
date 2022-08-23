@@ -3,24 +3,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pub_app/detail.dart';
 import 'package:pub_app/pub_ui/appbar.dart';
 import 'package:pub_app/pub_ui/package_item.dart';
+import 'package:pub_app/pub_ui/pub_repository.dart';
 import 'package:pub_app/pub_ui/searchbar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'search_page.g.dart';
 
-class Package {
-  Package(this.name);
-  final String name;
-}
-
 @riverpod
 Future<List<Package>> fetchPackages(FetchPackagesRef ref) async {
-  return [
-    Package('riverpod'),
-    Package('freezed'),
-    Package('flutter_hooks'),
-    // TODO show hot-reload
-  ];
+  final repository = PubRepository();
+
+  return repository.getPackages(page: 0);
 }
 
 class SearchPage extends ConsumerWidget {
@@ -43,11 +36,14 @@ class SearchPage extends ConsumerWidget {
                       for (final package in packages)
                         PackageItem(
                           name: package.name,
+                          version: package.latest.version,
+                          description: package.latest.pubspec.description,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) {
                               return PackageDetailPage(
-                                  packageName: package.name);
+                                packageName: package.name,
+                              );
                             }),
                           ),
                         ),
