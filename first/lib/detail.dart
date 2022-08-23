@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'pub_ui/appbar.dart';
 import 'pub_ui/package_detail_body.dart';
 
 /// The detail page of a package, typically reached by clicking on a package from [SearchPage].
-class PackageDetailPage extends ConsumerWidget {
+class PackageDetailPage extends StatelessWidget {
   const PackageDetailPage({Key? key, required this.packageName})
       : super(key: key);
 
@@ -13,7 +12,7 @@ class PackageDetailPage extends ConsumerWidget {
   final String packageName;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PubAppbar(),
       body: PackageDetailBodyScrollView(
