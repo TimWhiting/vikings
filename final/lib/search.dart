@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'detail.dart';
-import 'pub_repository.dart';
+import 'pub_ui/pub_repository.dart';
 import 'pub_ui/appbar.dart';
 import 'pub_ui/package_item.dart';
 import 'pub_ui/searchbar.dart';

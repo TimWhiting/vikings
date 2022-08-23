@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'pub_repository.dart';
+import 'pub_ui/pub_repository.dart';
 import 'pub_ui/appbar.dart';
 import 'pub_ui/package_detail_body.dart';
 import 'search.dart';
