@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pub_app/detail.dart';
 import 'package:pub_app/pub_ui/appbar.dart';
 import 'package:pub_app/pub_ui/package_item.dart';
@@ -9,17 +10,19 @@ class Package {
   final String name;
 }
 
-final packages = [
-  Package('riverpod'),
-  Package('freezed'),
-  Package('flutter_hooks'),
-];
+final packages = Provider<List<Package>>((ref) {
+  return [
+    Package('riverpod'),
+    Package('freezed'),
+    Package('flutter_hooks'),
+  ];
+});
 
-class SearchPage extends StatelessWidget {
+class SearchPage extends ConsumerWidget {
   const SearchPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: const PubAppbar(),
       body: Column(
@@ -28,7 +31,7 @@ class SearchPage extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
-                for (final package in packages)
+                for (final package in ref.watch(packages))
                   PackageItem(
                     name: package.name,
                     onTap: () => Navigator.push(
