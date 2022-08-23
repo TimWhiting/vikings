@@ -12,6 +12,7 @@ class PubRepository {
     required int page,
     CancelToken? cancelToken,
   }) async {
+    assert(page > 0);
     final uri = Uri(
       scheme: 'https',
       host: 'pub.dartlang.org',

@@ -10,10 +10,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'search_page.g.dart';
 
 @riverpod
-Future<List<Package>> fetchPackages(FetchPackagesRef ref) async {
-  final repository = PubRepository();
+PubRepository pubRepository(PubRepositoryRef ref) {
+  return PubRepository();
+}
 
-  return repository.getPackages(page: 0);
+@riverpod
+Future<List<Package>> fetchPackages(
+  FetchPackagesRef ref, {
+  required int page,
+}) async {
+  final repository = ref.watch(PubRepositoryProvider);
+
+  return repository.getPackages(page: page);
 }
 
 class SearchPage extends ConsumerWidget {
@@ -27,7 +35,7 @@ class SearchPage extends ConsumerWidget {
         children: [
           const SearchBar(),
           Expanded(
-            child: ref.watch(FetchPackagesProvider).when(
+            child: ref.watch(FetchPackagesProvider(page: 1)).when(
                 loading: () => CircularProgressIndicator(),
                 error: (err, stack) => Text('Error $err'),
                 data: (packages) {

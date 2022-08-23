@@ -29,13 +29,89 @@ class _SystemHash {
   }
 }
 
-String $fetchPackagesHash() => r'955ced425cbe92f29ae41daf52242d9a99db8158';
+String $pubRepositoryHash() => r'84cf58249e32ee9514705d307a691b0e33ab502a';
+
+/// See also [pubRepository].
+final PubRepositoryProvider = AutoDisposeProvider<PubRepository>(
+  pubRepository,
+  name: r'PubRepositoryProvider',
+  debugGetCreateSourceHash:
+      bool.fromEnvironment('dart.vm.product') ? null : $pubRepositoryHash,
+);
+typedef PubRepositoryRef = AutoDisposeProviderRef<PubRepository>;
+String $fetchPackagesHash() => r'2159250d0094e463319ad07c05ee9050d3cbcc5f';
 
 /// See also [fetchPackages].
-final FetchPackagesProvider = AutoDisposeFutureProvider<List<Package>>(
-  fetchPackages,
-  name: r'FetchPackagesProvider',
-  debugGetCreateSourceHash:
-      bool.fromEnvironment('dart.vm.product') ? null : $fetchPackagesHash,
-);
+class FetchPackagesProviderProvider
+    extends AutoDisposeFutureProvider<List<Package>> {
+  FetchPackagesProviderProvider({
+    required this.page,
+  }) : super(
+          (ref) => fetchPackages(
+            ref,
+            page: page,
+          ),
+          from: FetchPackagesProvider,
+          name: r'FetchPackagesProvider',
+          debugGetCreateSourceHash: bool.fromEnvironment('dart.vm.product')
+              ? null
+              : $fetchPackagesHash,
+        );
+
+  final int page;
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchPackagesProviderProvider && other.page == page;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, page.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
 typedef FetchPackagesRef = AutoDisposeFutureProviderRef<List<Package>>;
+
+/// See also [fetchPackages].
+final FetchPackagesProvider = FetchPackagesProviderFamily();
+
+class FetchPackagesProviderFamily extends Family<AsyncValue<List<Package>>> {
+  FetchPackagesProviderFamily();
+
+  FetchPackagesProviderProvider call({
+    required int page,
+  }) {
+    return FetchPackagesProviderProvider(
+      page: page,
+    );
+  }
+
+  @override
+  AutoDisposeFutureProvider<List<Package>> getProviderOverride(
+    covariant FetchPackagesProviderProvider provider,
+  ) {
+    return call(
+      page: provider.page,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies =>
+      throw UnimplementedError();
+
+  @override
+  int? get disposeDelay => null;
+
+  @override
+  int? get cacheTime => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => throw UnimplementedError();
+
+  @override
+  String? get name => r'FetchPackagesProvider';
+}
