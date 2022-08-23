@@ -68,6 +68,9 @@ Pub app:
   - we'd need to cancel the request, but combined with cacheTime that could be awkard
 - reusable cancellation logic
 
+??
+- optimistic like update (modifying it before network request, and if fail, revert)
+
 
 - generate riverpod_grap
 - open flutter devtool to inspect providers

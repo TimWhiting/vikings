@@ -20,13 +20,29 @@ Future<Package> fetchPackageDetails(
 }
 
 @riverpod
-Future<PackageMetricsScore> getPackageMetrics(
-  GetPackageMetricsRef ref, {
-  required String packageName,
-}) async {
-  return ref
-      .watch(PubRepositoryProvider)
-      .getPackageMetrics(packageName: packageName);
+class GetPackageMetrics extends _$GetPackageMetrics {
+  @override
+  Future<PackageMetricsScore> build({
+    required String packageName,
+  }) async {
+    return ref
+        .watch(PubRepositoryProvider)
+        .getPackageMetrics(packageName: packageName);
+  }
+
+  Future<void> like() async {
+    await ref.watch(PubRepositoryProvider).like(packageName: packageName);
+
+    ref.invalidateSelf();
+    ref.invalidate(GetLikedPackagesProvider);
+  }
+
+  Future<void> unlike() async {
+    await ref.watch(PubRepositoryProvider).unlike(packageName: packageName);
+
+    ref.invalidateSelf();
+    ref.invalidate(GetLikedPackagesProvider);
+  }
 }
 
 @riverpod
@@ -81,7 +97,19 @@ class PackageDetailPage extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          final notifier = ref.read(
+            GetPackageMetricsProvider(packageName: packageName).notifier,
+          );
+
+          print('a');
+
+          if (!isLiked) {
+            notifier.like();
+          } else {
+            notifier.unlike();
+          }
+        },
         child: isLiked
             ? const Icon(Icons.favorite)
             : const Icon(Icons.favorite_border),

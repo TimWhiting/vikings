@@ -29,6 +29,103 @@ class _SystemHash {
   }
 }
 
+String $GetPackageMetricsHash() => r'1e813efe392f854e99e1b466b720d219b4a65d6f';
+
+/// See also [GetPackageMetrics].
+class GetPackageMetricsProviderProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<GetPackageMetrics,
+        PackageMetricsScore> {
+  GetPackageMetricsProviderProvider({
+    required this.packageName,
+  }) : super(
+          () => GetPackageMetrics()..packageName = packageName,
+          from: GetPackageMetricsProvider,
+          name: r'GetPackageMetricsProvider',
+          debugGetCreateSourceHash: bool.fromEnvironment('dart.vm.product')
+              ? null
+              : $GetPackageMetricsHash,
+        );
+
+  final String packageName;
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetPackageMetricsProviderProvider &&
+        other.packageName == packageName;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, packageName.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+
+  @override
+  FutureOr<PackageMetricsScore> runNotifierBuild(
+    covariant _$GetPackageMetrics notifier,
+  ) {
+    return notifier.build(
+      packageName: packageName,
+    );
+  }
+}
+
+typedef GetPackageMetricsRef
+    = AutoDisposeAsyncNotifierProviderRef<PackageMetricsScore>;
+
+/// See also [GetPackageMetrics].
+final GetPackageMetricsProvider = GetPackageMetricsProviderFamily();
+
+class GetPackageMetricsProviderFamily
+    extends Family<AsyncValue<PackageMetricsScore>> {
+  GetPackageMetricsProviderFamily();
+
+  GetPackageMetricsProviderProvider call({
+    required String packageName,
+  }) {
+    return GetPackageMetricsProviderProvider(
+      packageName: packageName,
+    );
+  }
+
+  @override
+  AutoDisposeAsyncNotifierProviderImpl<GetPackageMetrics, PackageMetricsScore>
+      getProviderOverride(
+    covariant GetPackageMetricsProviderProvider provider,
+  ) {
+    return call(
+      packageName: provider.packageName,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies =>
+      throw UnimplementedError();
+
+  @override
+  int? get disposeDelay => null;
+
+  @override
+  int? get cacheTime => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => throw UnimplementedError();
+
+  @override
+  String? get name => r'GetPackageMetricsProvider';
+}
+
+abstract class _$GetPackageMetrics
+    extends BuildlessAutoDisposeAsyncNotifier<PackageMetricsScore> {
+  late final String packageName;
+
+  FutureOr<PackageMetricsScore> build({
+    required String packageName,
+  });
+}
+
 String $fetchPackageDetailsHash() =>
     r'b42a08337fcec551279dfc6d6eb431a17d2feb7f';
 
@@ -108,82 +205,13 @@ class FetchPackageDetailsProviderFamily extends Family<AsyncValue<Package>> {
   String? get name => r'FetchPackageDetailsProvider';
 }
 
-String $getPackageMetricsHash() => r'3a0fdf12cd57793d232cba393c7840e97724718e';
+String $getLikedPackagesHash() => r'35b7e436db28bd096dbe7db5e3d55008c4ec608f';
 
-/// See also [getPackageMetrics].
-class GetPackageMetricsProviderProvider
-    extends AutoDisposeFutureProvider<PackageMetricsScore> {
-  GetPackageMetricsProviderProvider({
-    required this.packageName,
-  }) : super(
-          (ref) => getPackageMetrics(
-            ref,
-            packageName: packageName,
-          ),
-          from: GetPackageMetricsProvider,
-          name: r'GetPackageMetricsProvider',
-          debugGetCreateSourceHash: bool.fromEnvironment('dart.vm.product')
-              ? null
-              : $getPackageMetricsHash,
-        );
-
-  final String packageName;
-
-  @override
-  bool operator ==(Object other) {
-    return other is GetPackageMetricsProviderProvider &&
-        other.packageName == packageName;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, packageName.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-typedef GetPackageMetricsRef
-    = AutoDisposeFutureProviderRef<PackageMetricsScore>;
-
-/// See also [getPackageMetrics].
-final GetPackageMetricsProvider = GetPackageMetricsProviderFamily();
-
-class GetPackageMetricsProviderFamily
-    extends Family<AsyncValue<PackageMetricsScore>> {
-  GetPackageMetricsProviderFamily();
-
-  GetPackageMetricsProviderProvider call({
-    required String packageName,
-  }) {
-    return GetPackageMetricsProviderProvider(
-      packageName: packageName,
-    );
-  }
-
-  @override
-  AutoDisposeFutureProvider<PackageMetricsScore> getProviderOverride(
-    covariant GetPackageMetricsProviderProvider provider,
-  ) {
-    return call(
-      packageName: provider.packageName,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies =>
-      throw UnimplementedError();
-
-  @override
-  int? get disposeDelay => null;
-
-  @override
-  int? get cacheTime => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => throw UnimplementedError();
-
-  @override
-  String? get name => r'GetPackageMetricsProvider';
-}
+/// See also [getLikedPackages].
+final GetLikedPackagesProvider = AutoDisposeFutureProvider<List<String>>(
+  getLikedPackages,
+  name: r'GetLikedPackagesProvider',
+  debugGetCreateSourceHash:
+      bool.fromEnvironment('dart.vm.product') ? null : $getLikedPackagesHash,
+);
+typedef GetLikedPackagesRef = AutoDisposeFutureProviderRef<List<String>>;
