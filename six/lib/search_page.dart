@@ -35,29 +35,40 @@ class SearchPage extends ConsumerWidget {
         children: [
           const SearchBar(),
           Expanded(
-            child: ref.watch(FetchPackagesProvider(page: 1)).when(
-                loading: () => CircularProgressIndicator(),
-                error: (err, stack) => Text('Error $err'),
-                data: (packages) {
-                  return ListView(
-                    children: [
-                      for (final package in packages)
-                        PackageItem(
-                          name: package.name,
-                          version: package.latest.version,
-                          description: package.latest.pubspec.description,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return PackageDetailPage(
-                                packageName: package.name,
-                              );
-                            }),
-                          ),
-                        ),
-                    ],
-                  );
-                }),
+            child: ListView.custom(
+              childrenDelegate: SliverChildBuilderDelegate((context, index) {
+                final pageLimit = PubRepository.packagesPackageSize;
+
+                final page = index ~/ pageLimit + 1;
+                final itemIndexInPage = index % pageLimit;
+
+                final packages = ref.watch(FetchPackagesProvider(page: page));
+
+                return packages.when(
+                  loading: () => PackageItemShimmer(),
+                  error: (err, stack) => Text('err $err'),
+                  data: (packages) {
+                    if (itemIndexInPage >= packages.length) return null;
+
+                    final package = packages[itemIndexInPage];
+
+                    return PackageItem(
+                      name: package.name,
+                      version: package.latest.version,
+                      description: package.latest.pubspec.description,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return PackageDetailPage(
+                            packageName: package.name,
+                          );
+                        }),
+                      ),
+                    );
+                  },
+                );
+              }),
+            ),
           ),
         ],
       ),

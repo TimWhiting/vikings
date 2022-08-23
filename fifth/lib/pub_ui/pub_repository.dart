@@ -6,6 +6,9 @@ part 'pub_repository.freezed.dart';
 part 'pub_repository.g.dart';
 
 class PubRepository {
+  static const packagesPackageSize = 100;
+  static const searchPageSize = 10;
+
   final dio = Dio();
 
   Future<List<Package>> getPackages({

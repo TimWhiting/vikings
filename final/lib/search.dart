@@ -11,9 +11,6 @@ import 'pub_ui/searchbar.dart';
 
 part 'search.g.dart';
 
-const packagesPackageSize = 100;
-const searchPageSize = 10;
-
 @riverpod
 Future<List<Package>> fetchPackages(
   FetchPackagesRef ref, {
@@ -77,8 +74,8 @@ class SearchPage extends HookConsumerWidget {
                 padding: const EdgeInsets.only(top: 30),
                 childrenDelegate: SliverChildBuilderDelegate((context, index) {
                   final pageSize = searchController.text.isEmpty
-                      ? packagesPackageSize
-                      : searchPageSize;
+                      ? PubRepository.packagesPackageSize
+                      : PubRepository.searchPageSize;
 
                   final page = index ~/ pageSize + 1;
                   final indexInPage = index % pageSize;
