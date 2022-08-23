@@ -48,7 +48,8 @@ Just kidding. let's build a real app for once
 _____
 
 Pub app:
-- start with a synchronous
+- start with a synchronous using Provider<int>
+- refactor to @riverpod and showcase hot-reload
 - refactor to fetching the first page of the packages API -> show "when" 
 - add detail page
 - cancel network request of detail page if leaving quickly

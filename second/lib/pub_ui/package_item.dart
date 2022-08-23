@@ -5,8 +5,8 @@ class PackageItem extends StatelessWidget {
   const PackageItem({
     Key? key,
     required this.name,
-    required this.version,
-    required this.description,
+    this.version = '0.0.0',
+    this.description,
     this.onTap,
   }) : super(key: key);
 
