@@ -54,18 +54,19 @@ Pub app:
 - extract PubRepository to a separate provider -> testing
 - infinite list -> ListView.builder + family with page parameter
 - add detail page
+- like a package -> notifier
+  - when liking a package, should update the metrics
+- pull to refresh
+- http polling for the likes count
+  - mention how the polling automatically stops when leaving the page
 - cancel network request of detail page if leaving quickly
-- reusable cancellation logic
 - What about error handling? Nothing to do
 - Add detail package -> family with packageName parameter
 - using cacheTime such that leaving then re-entering a detrail page quickly doesn't refetch it immediately
 - search as we type using family
 - debouncing search as we type ?
   - we'd need to cancel the request, but combined with cacheTime that could be awkard
-- pull to refresh
-- http polling for the likes count
-  - mention how the polling automatically stops when leaving the page
-- like a package -> notifier
+- reusable cancellation logic
 
 
 - generate riverpod_grap
