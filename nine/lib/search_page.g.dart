@@ -39,17 +39,19 @@ final PubRepositoryProvider = AutoDisposeProvider<PubRepository>(
       bool.fromEnvironment('dart.vm.product') ? null : $pubRepositoryHash,
 );
 typedef PubRepositoryRef = AutoDisposeProviderRef<PubRepository>;
-String $fetchPackagesHash() => r'2159250d0094e463319ad07c05ee9050d3cbcc5f';
+String $fetchPackagesHash() => r'e7855c32de8d9392e3fcd6c0ffa0ff1899f6ced7';
 
 /// See also [fetchPackages].
 class FetchPackagesProviderProvider
     extends AutoDisposeFutureProvider<List<Package>> {
   FetchPackagesProviderProvider({
     required this.page,
+    this.search = '',
   }) : super(
           (ref) => fetchPackages(
             ref,
             page: page,
+            search: search,
           ),
           from: FetchPackagesProvider,
           name: r'FetchPackagesProvider',
@@ -59,16 +61,20 @@ class FetchPackagesProviderProvider
         );
 
   final int page;
+  final String search;
 
   @override
   bool operator ==(Object other) {
-    return other is FetchPackagesProviderProvider && other.page == page;
+    return other is FetchPackagesProviderProvider &&
+        other.page == page &&
+        other.search == search;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, page.hashCode);
+    hash = _SystemHash.combine(hash, search.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -84,9 +90,11 @@ class FetchPackagesProviderFamily extends Family<AsyncValue<List<Package>>> {
 
   FetchPackagesProviderProvider call({
     required int page,
+    String search = '',
   }) {
     return FetchPackagesProviderProvider(
       page: page,
+      search: search,
     );
   }
 
@@ -96,6 +104,7 @@ class FetchPackagesProviderFamily extends Family<AsyncValue<List<Package>>> {
   ) {
     return call(
       page: provider.page,
+      search: provider.search,
     );
   }
 

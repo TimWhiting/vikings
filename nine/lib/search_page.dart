@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pub_app/detail.dart';
 import 'package:pub_app/pub_ui/appbar.dart';
@@ -18,31 +19,51 @@ PubRepository pubRepository(PubRepositoryRef ref) {
 Future<List<Package>> fetchPackages(
   FetchPackagesRef ref, {
   required int page,
+  String search = '',
 }) async {
-  final repository = ref.watch(PubRepositoryProvider);
+  assert(page > 0, 'page offset starts at 1');
+  if (search.isEmpty) {
+    return ref.watch(PubRepositoryProvider).getPackages(page: page);
+  }
 
-  return repository.getPackages(page: page);
+  final searchedPackages = await ref
+      .watch(PubRepositoryProvider)
+      .searchPackages(page: page, search: search);
+
+  return Future.wait([
+    for (final package in searchedPackages)
+      ref.watch(
+        FetchPackageDetailsProvider(packageName: package.package).future,
+      ),
+  ]);
 }
 
-class SearchPage extends ConsumerWidget {
+class SearchPage extends HookConsumerWidget {
   const SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useTextEditingController();
+    useListenable(controller);
+
     return Scaffold(
       appBar: const PubAppbar(),
       body: Column(
         children: [
-          const SearchBar(),
+          SearchBar(controller: controller),
           Expanded(
             child: ListView.custom(
               childrenDelegate: SliverChildBuilderDelegate((context, index) {
-                final pageLimit = PubRepository.packagesPackageSize;
+                final pageLimit = controller.text.isNotEmpty
+                    ? PubRepository.searchPageSize
+                    : PubRepository.packagesPackageSize;
 
                 final page = index ~/ pageLimit + 1;
                 final itemIndexInPage = index % pageLimit;
 
-                final packages = ref.watch(FetchPackagesProvider(page: page));
+                final packages = ref.watch(
+                  FetchPackagesProvider(page: page, search: controller.text),
+                );
 
                 return packages.when(
                   loading: () => PackageItemShimmer(),
