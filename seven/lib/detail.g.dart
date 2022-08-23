@@ -187,3 +187,14 @@ class GetPackageMetricsProviderFamily
   @override
   String? get name => r'GetPackageMetricsProvider';
 }
+
+String $getLikedPackagesHash() => r'35b7e436db28bd096dbe7db5e3d55008c4ec608f';
+
+/// See also [getLikedPackages].
+final GetLikedPackagesProvider = AutoDisposeFutureProvider<List<String>>(
+  getLikedPackages,
+  name: r'GetLikedPackagesProvider',
+  debugGetCreateSourceHash:
+      bool.fromEnvironment('dart.vm.product') ? null : $getLikedPackagesHash,
+);
+typedef GetLikedPackagesRef = AutoDisposeFutureProviderRef<List<String>>;

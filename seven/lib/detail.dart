@@ -29,6 +29,11 @@ Future<PackageMetricsScore> getPackageMetrics(
       .getPackageMetrics(packageName: packageName);
 }
 
+@riverpod
+Future<List<String>> getLikedPackages(GetLikedPackagesRef ref) async {
+  return ref.watch(PubRepositoryProvider).getLikedPackages();
+}
+
 /// The detail page of a package, typically reached by clicking on a package from [SearchPage].
 class PackageDetailPage extends ConsumerWidget {
   const PackageDetailPage({Key? key, required this.packageName})
@@ -45,6 +50,12 @@ class PackageDetailPage extends ConsumerWidget {
     final metrics = ref.watch(
       GetPackageMetricsProvider(packageName: packageName),
     );
+
+    final isLiked = ref
+            .watch(GetLikedPackagesProvider)
+            .valueOrNull
+            ?.contains(packageName) ??
+        false;
 
     return Scaffold(
       appBar: const PubAppbar(),
@@ -71,7 +82,9 @@ class PackageDetailPage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(Icons.favorite_border),
+        child: isLiked
+            ? const Icon(Icons.favorite)
+            : const Icon(Icons.favorite_border),
       ),
     );
   }
