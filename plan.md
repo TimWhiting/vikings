@@ -53,19 +53,19 @@ Pub app:
 - refactor to fetching the first page of the packages API -> show "when" 
 - extract PubRepository to a separate provider -> testing
 - infinite list -> ListView.builder + family with page parameter
-- add detail page
+- Add detail package -> family with packageName parameter
 - like a package -> notifier
   - when liking a package, should update the metrics
-- pull to refresh
+- add search as we type
+
++++
+
+- cancel network request of detail page if leaving quickly
+- debouncing search as we type ?
+- pull to refresh details
 - http polling for the likes count
   - mention how the polling automatically stops when leaving the page
-- cancel network request of detail page if leaving quickly
-- What about error handling? Nothing to do
-- Add detail package -> family with packageName parameter
 - using cacheTime such that leaving then re-entering a detrail page quickly doesn't refetch it immediately
-- search as we type using family
-- debouncing search as we type ?
-  - we'd need to cancel the request, but combined with cacheTime that could be awkard
 - reusable cancellation logic
 
 ??
