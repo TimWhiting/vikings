@@ -102,8 +102,6 @@ class PackageDetailPage extends ConsumerWidget {
             GetPackageMetricsProvider(packageName: packageName).notifier,
           );
 
-          print('a');
-
           if (!isLiked) {
             notifier.like();
           } else {
