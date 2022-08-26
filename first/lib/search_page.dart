@@ -10,9 +10,9 @@ class Package {
 }
 
 final packages = [
-  Package('riverpod'),
-  Package('freezed'),
-  Package('flutter_hooks'),
+  Package('doc_widget'),
+  Package('flutter_overlay_window'),
+  Package('slang'),
 ];
 
 class SearchPage extends StatelessWidget {
