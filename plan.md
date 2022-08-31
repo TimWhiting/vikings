@@ -1,7 +1,7 @@
 Riverpod 2.0 announcement
   - release coming soon
 
-Shift if direction for Riverpod
+Shift of direction for Riverpod
   - no longer considered "state management" and "dependency injection".
     It is, but in the mind of Flutter developers, it makes them expect
       - a listenable + observable object, with some form of setState/notifyListeners/emit/...
@@ -14,7 +14,7 @@ Shift if direction for Riverpod
    for storing the result of asynchronous requests.
    But a ChangeNotifier-equivalent is a bit low-level. Riverpod includes utilities that
    go further, such as:
-   - offering utilties for invalidating cache
+   - offering utilities for invalidating cache
    - adding built-in error handling
    - natively supporting scenarios like pull-to-refresh
 
@@ -67,7 +67,7 @@ Pub app:
 - pull to refresh details
 - http polling for the likes count
   - mention how the polling automatically stops when leaving the page
-- using cacheTime such that leaving then re-entering a detrail page quickly doesn't refetch it immediately
+- using cacheTime such that leaving then re-entering a detail page quickly doesn't refetch it immediately
 - reusable cancellation logic
 
 ??
